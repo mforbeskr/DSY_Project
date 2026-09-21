@@ -12,7 +12,12 @@ public class TraceabilityServiceImpl extends TraceabilityServiceGrpc.Traceabilit
 
     public TraceabilityServiceImpl()
     {
-        repository = new TraceabilityRepositoryImpl();
+        this(new TraceabilityRepositoryImpl());
+    }
+
+    public TraceabilityServiceImpl(TraceabilityRepository repository)
+    {
+        this.repository = repository;
     }
 
     @Override
