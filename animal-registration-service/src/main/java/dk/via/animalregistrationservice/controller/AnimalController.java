@@ -35,9 +35,7 @@ public class AnimalController {
         Animal animal = new Animal(request.registrationNumber(), request.arrivalDate(), request.origin(), request.weight());
         Animal saved = service.register(animal);
 
-        return ResponseEntity
-                .created(URI.create("/animals/" + saved.getAnimalId()))
-                .body(saved);
+        return ResponseEntity.created(URI.create("/animals/" + saved.getAnimalId())).body(saved);
     }
 
     // GET /animals/1  ->  200 + the animal, or 404 if it doesn't exist

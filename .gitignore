@@ -42,3 +42,4 @@ build/
 ### other ###
 documentation/*.pdf
 documentation/DSY projekt overblik.md
+documentation/*.puml
