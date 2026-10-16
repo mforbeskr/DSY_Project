@@ -1,12 +1,3 @@
--- DSY Slaughterhouse - schema (PostgreSQL)
---
--- Setup in IntelliJ:
---   1. Create the database: CREATE DATABASE dsy_slaughterhouse;
---   2. Add/select a data source pointing at dsy_slaughterhouse (Database tool window).
---   3. Run this file, then 02_insert_data.sql, against that data source.
---
--- Connection settings used by the service: traceability-service/src/main/java/database/DatabaseConfig.java
-
 DROP TABLE IF EXISTS producttray;
 DROP TABLE IF EXISTS product;
 DROP TABLE IF EXISTS producttype;
@@ -20,6 +11,7 @@ CREATE TABLE animal
     animal_id           INTEGER PRIMARY KEY,
     arrival_date        DATE,
     weight              DOUBLE PRECISION,
+    origin              VARCHAR(50),
     registration_number VARCHAR(50)
 );
 

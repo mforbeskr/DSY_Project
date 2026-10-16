@@ -1,14 +1,6 @@
--- DSY Slaughterhouse - test data (PostgreSQL)
--- Run after 01_create_tables.sql.
---
--- Example traceability with this data:
---   product 1 -> tray 1          -> animals REG001, REG002
---   product 2 -> trays 1 and 2   -> animals REG001, REG002
---   animal 1  -> products 1, 2
-
-INSERT INTO animal (animal_id, arrival_date, weight, registration_number)
-VALUES (1, '2026-09-18', 120.5, 'REG001'),
-       (2, '2026-09-18', 132, 'REG002');
+INSERT INTO animal (animal_id, arrival_date, weight, origin, registration_number)
+VALUES (1, '2026-09-18', 120.5, 'FARM001', 'REG001'),
+       (2, '2026-09-18', 132, 'FARM002', 'REG002');
 
 INSERT INTO parttype (part_type_id, name)
 VALUES (1, 'Ham'),
