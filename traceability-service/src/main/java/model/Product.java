@@ -1,16 +1,16 @@
 package model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class Product
 {
     private final int productId;
-    private final LocalDate packingDate;
+    private final LocalDateTime packingDate;
     private final String type;
     private final List<Integer> trayIds;
 
-    public Product(int productId, LocalDate packingDate, String type, List<Integer> trayIds)
+    public Product(int productId, LocalDateTime packingDate, String type, List<Integer> trayIds)
     {
         this.productId = productId;
         this.packingDate = packingDate;
@@ -23,7 +23,7 @@ public class Product
         return productId;
     }
 
-    public LocalDate getPackingDate()
+    public LocalDateTime getPackingDate()
     {
         return packingDate;
     }

@@ -2,7 +2,7 @@ package model;
 
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +15,11 @@ class ModelTest
     @Test
     void animal_exposesItsValues()
     {
-        Animal animal = new Animal(1, "DK-001", LocalDate.of(2026, 9, 1), 250.5);
+        Animal animal = new Animal(1, "DK-001", LocalDateTime.of(2026, 9, 1, 15, 45), 250.5);
 
         assertEquals(1, animal.getAnimalId());
         assertEquals("DK-001", animal.getRegistrationNumber());
-        assertEquals(LocalDate.of(2026, 9, 1), animal.getArrivalDate());
+        assertEquals(LocalDateTime.of(2026, 9, 1, 15, 45), animal.getArrivalDate());
         assertEquals(250.5, animal.getWeight());
     }
 
@@ -57,10 +57,10 @@ class ModelTest
     @Test
     void product_exposesItsValues()
     {
-        Product product = new Product(9, LocalDate.of(2026, 9, 5), "Half animal", List.of(3, 4));
+        Product product = new Product(9, LocalDateTime.of(2026, 9, 5, 14, 25), "Half animal", List.of(3, 4));
 
         assertEquals(9, product.getProductId());
-        assertEquals(LocalDate.of(2026, 9, 5), product.getPackingDate());
+        assertEquals(LocalDateTime.of(2026, 9, 5, 14, 25), product.getPackingDate());
         assertEquals("Half animal", product.getType());
         assertEquals(List.of(3, 4), product.getTrayIds());
     }
@@ -69,7 +69,7 @@ class ModelTest
     void product_isNotAffectedByLaterChangesToTheListItWasGiven()
     {
         List<Integer> trayIds = new ArrayList<>(List.of(3, 4));
-        Product product = new Product(9, LocalDate.of(2026, 9, 5), "Half animal", trayIds);
+        Product product = new Product(9, LocalDateTime.of(2026, 9, 5, 14, 25), "Half animal", trayIds);
 
         trayIds.add(5);
 
@@ -79,7 +79,7 @@ class ModelTest
     @Test
     void product_trayIdsCannotBeModifiedFromOutside()
     {
-        Product product = new Product(9, LocalDate.of(2026, 9, 5), "Half animal", List.of(3, 4));
+        Product product = new Product(9, LocalDateTime.of(2026, 9, 5, 14, 25), "Half animal", List.of(3, 4));
 
         assertThrows(UnsupportedOperationException.class, () -> product.getTrayIds().add(5));
     }

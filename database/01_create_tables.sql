@@ -8,22 +8,22 @@ DROP TABLE IF EXISTS animal;
 
 CREATE TABLE animal
 (
-    animal_id           INTEGER PRIMARY KEY,
-    arrival_date        DATE,
-    weight              DOUBLE PRECISION,
-    origin              VARCHAR(50),
-    registration_number VARCHAR(50)
+    animal_id           INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    arrival_date        TIMESTAMP NOT NULL,
+    weight              DOUBLE PRECISION NOT NULL,
+    origin              VARCHAR(50) NOT NULL,
+    registration_number VARCHAR(50) UNIQUE NOT NULL
 );
 
 CREATE TABLE parttype
 (
-    part_type_id INTEGER PRIMARY KEY,
+    part_type_id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name         VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE tray
 (
-    tray_id             INTEGER PRIMARY KEY,
+    tray_id             INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     max_weight_capacity DOUBLE PRECISION NOT NULL,
     current_weight      DOUBLE PRECISION NOT NULL,
     part_type_id        INTEGER          NOT NULL REFERENCES parttype (part_type_id)
@@ -31,7 +31,7 @@ CREATE TABLE tray
 
 CREATE TABLE part
 (
-    part_id      INTEGER PRIMARY KEY,
+    part_id      INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     weight       DOUBLE PRECISION NOT NULL,
     animal_id    INTEGER          NOT NULL REFERENCES animal (animal_id),
     tray_id      INTEGER          NOT NULL REFERENCES tray (tray_id),
@@ -40,14 +40,14 @@ CREATE TABLE part
 
 CREATE TABLE producttype
 (
-    product_type_id INTEGER PRIMARY KEY,
+    product_type_id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name            VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE product
 (
-    product_id      INTEGER PRIMARY KEY,
-    packing_date    DATE,
+    product_id      INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    packing_date    TIMESTAMP,
     product_type_id INTEGER NOT NULL REFERENCES producttype (product_type_id)
 );
 
