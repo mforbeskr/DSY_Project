@@ -16,4 +16,6 @@ public interface AnimalRepository extends JpaRepository<Animal, Integer> {
 
     Optional<Animal> findAnimalByRegistrationNumber(String registrationNumber);
 
+    List<Animal> findAnimalsBySyncedFalse();
+
 }

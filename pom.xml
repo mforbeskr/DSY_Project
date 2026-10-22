@@ -15,7 +15,7 @@
     <modules>
         <module>traceability-service</module>
         <module>animal-registration-service</module>
-
+        <module>central-ingestion-service</module>
     </modules>
 
 </project>

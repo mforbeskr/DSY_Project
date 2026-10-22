@@ -75,4 +75,18 @@ class AnimalRepositoryTest {
 
         assertEquals(List.of("TEST-LATE", "TEST-START"), registrationNumbers(found));
     }
+
+    @Test
+    void findAnimalsBySyncedFalse_returnsOnlyUnsyncedAnimals() {
+        save("TEST-UNSYNCED", LocalDateTime.of(2030, 1, 1, 12, 0));
+        Animal synced = save("TEST-SYNCED", LocalDateTime.of(2030, 1, 1, 12, 0));
+        synced.markSynced();
+        repository.save(synced);
+
+        List<Animal> unsynced = repository.findAnimalsBySyncedFalse().stream()
+                .filter(animal -> animal.getOrigin().equals(FARM))
+                .toList();
+
+        assertEquals(List.of("TEST-UNSYNCED"), registrationNumbers(unsynced));
+    }
 }

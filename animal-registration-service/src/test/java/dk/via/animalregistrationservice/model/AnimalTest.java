@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AnimalTest {
 
@@ -23,5 +25,14 @@ class AnimalTest {
         Animal animal = new Animal("REG001", LocalDateTime.of(2026, 9, 18, 7, 30), "FARM001", 120.5);
 
         assertEquals(0, animal.getAnimalId());
+    }
+
+    @Test
+    void animal_isNotSyncedUntilItIsMarked() {
+        Animal animal = new Animal("REG001", LocalDateTime.of(2026, 9, 18, 7, 30), "FARM001", 120.5);
+
+        assertFalse(animal.isSynced());
+        animal.markSynced();
+        assertTrue(animal.isSynced());
     }
 }

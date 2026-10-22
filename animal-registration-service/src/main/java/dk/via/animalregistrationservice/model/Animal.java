@@ -15,6 +15,7 @@ public class Animal {
     private LocalDateTime arrivalDate;
     private String origin;
     private double weight;
+    private boolean synced;
 
     public Animal() {
     }
@@ -44,5 +45,13 @@ public class Animal {
 
     public double getWeight() {
         return weight;
+    }
+
+    public boolean isSynced() {
+        return synced;
+    }
+
+    public void markSynced() {
+        synced = true;
     }
 }
