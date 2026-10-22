@@ -1,0 +1,49 @@
+# DSY Projekt - Slagteri
+
+PRO3/DSY kursusopgave. Lavet alene.
+
+## Services
+
+| Service | Hvad | Port |
+|---|---|---|
+| traceability-service | gRPC, finder dyr i et produkt og produkter et dyr er i (Part 2) | 9090 |
+| animal-registration-service | REST, station 1, registrerer dyr i sin egen lokale DB (Part 3) | 8080 |
+| central-ingestion-service | Henter dyr fra RabbitMQ og skriver dem i den centrale DB | - |
+
+Station 1 gemmer lokalt, så den virker selvom nettet er nede. Dyrene sendes via RabbitMQ til den centrale DB når der er forbindelse.
+
+## Diagrammer
+
+Ligger i `documentation/`. Begge domænemodeller (Ass1 og Ass3) er med, så man kan se udviklingen.
+
+## Kør det
+
+1. Opret databaserne og kør scripts, se `database/README.md`
+2. Start RabbitMQ (kræver Docker): `docker compose up -d`
+3. Start `Main` i de tre services
+4. Tests: `mvn test` i roden (kræver PostgreSQL)
+
+## Postman eksempler
+
+Registrer et dyr:
+```
+POST http://localhost:8080/animals
+Content-Type: application/json
+
+{ "registrationNumber": "REG003", "arrivalDate": "2026-09-19T07:30:00", "origin": "FARM001", "weight": 110 }
+```
+
+Hent et dyr:
+```
+GET http://localhost:8080/animals/1
+```
+
+Alle dyr der ankom på en dato:
+```
+GET http://localhost:8080/animals?date=2026-09-18
+```
+
+Alle dyr fra en gård:
+```
+GET http://localhost:8080/animals?origin=FARM001
+```
