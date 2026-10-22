@@ -1,4 +1,4 @@
-# DSY Projekt - Slagteri
+# DSY Project - Slaughterhouse
 
 PRO3/DSY kursusopgave. Lavet alene.
 
