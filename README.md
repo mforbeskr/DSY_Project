@@ -8,7 +8,8 @@ PRO3/DSY kursusopgave. Lavet alene.
 |---|---|---|
 | traceability-service | gRPC, finder dyr i et produkt og produkter et dyr er i (Part 2) | 9090 |
 | animal-registration-service | REST, station 1, registrerer dyr i sin egen lokale DB (Part 3) | 8080 |
-| central-ingestion-service | Henter dyr fra RabbitMQ og skriver dem i den centrale DB | - |
+| central-ingestion-service | Henter dyr fra RabbitMQ og skriver dem i den centrale DB | 8081 |
+| frontend | React, registrer og søg dyr, viser hvordan et dyr flyder gennem systemet (ekstra, ikke krav) | 5173 |
 
 Station 1 gemmer lokalt, så den virker selvom nettet er nede. Dyrene sendes via RabbitMQ til den centrale DB når der er forbindelse.
 
@@ -20,8 +21,9 @@ Ligger i `documentation/`. Begge domænemodeller (Ass1 og Ass3) er med, så man 
 
 1. Opret databaserne og kør scripts, se `database/README.md`
 2. Start RabbitMQ (kræver Docker): `docker compose up -d`
-3. Start `Main` i de tre services
-4. Tests: `mvn test` i roden (kræver PostgreSQL)
+3. Start de tre services: `MainRegistration` i animal-registration-service, `Main` i de to andre
+4. Frontend (kræver Node): `cd frontend`, `npm install`, `npm run dev` og åbn http://localhost:5173
+5. Tests: `mvn test` i roden (kræver PostgreSQL)
 
 ## Postman eksempler
 

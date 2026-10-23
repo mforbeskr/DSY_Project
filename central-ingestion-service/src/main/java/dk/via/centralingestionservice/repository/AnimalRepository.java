@@ -4,6 +4,8 @@ import dk.via.centralingestionservice.messaging.AnimalRegisteredEvent;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public class AnimalRepository {
 
@@ -22,5 +24,12 @@ public class AnimalRepository {
                         """)
                 .params(event.registrationNumber(), event.arrivalDate(), event.origin(), event.weight())
                 .update();
+    }
+
+    public Optional<CentralAnimal> findByRegistrationNumber(String registrationNumber) {
+        return jdbcClient.sql("SELECT animal_id, registration_number FROM animal WHERE registration_number = ?")
+                .param(registrationNumber)
+                .query(CentralAnimal.class)
+                .optional();
     }
 }

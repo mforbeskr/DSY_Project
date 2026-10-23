@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Runs against the real central database. Every test is rolled back afterwards.
@@ -48,5 +49,17 @@ class AnimalRepositoryTest {
 
         assertEquals(0, repository.insert(EVENT));
         assertEquals(1, countAnimals("TEST-001"));
+    }
+
+    @Test
+    void findByRegistrationNumber_findsAnInsertedAnimal() {
+        repository.insert(EVENT);
+
+        assertEquals("TEST-001", repository.findByRegistrationNumber("TEST-001").orElseThrow().registrationNumber());
+    }
+
+    @Test
+    void findByRegistrationNumber_returnsEmptyForUnknownNumber() {
+        assertTrue(repository.findByRegistrationNumber("TEST-UNKNOWN").isEmpty());
     }
 }
