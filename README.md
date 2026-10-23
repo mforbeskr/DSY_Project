@@ -21,7 +21,7 @@ Ligger i `documentation/`. Begge domænemodeller (Ass1 og Ass3) er med, så man 
 
 1. Opret databaserne og kør scripts, se `database/README.md`
 2. Start RabbitMQ (kræver Docker): `docker compose up -d`
-3. Start de tre services: `MainRegistration` i animal-registration-service, `Main` i de to andre
+3. Start de tre services: `MainRegistration` i animal-registration-service, `MainIngestion` i de to andre
 4. Frontend (kræver Node): `cd frontend`, `npm install`, `npm run dev` og åbn http://localhost:5173
 5. Tests: `mvn test` i roden (kræver PostgreSQL)
 

@@ -31,9 +31,31 @@ body {
 }
 
 main {
-    max-width: 880px;
+    max-width: 1240px;
     margin: 0 auto;
     padding: 64px 24px;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 420px;
+    gap: 20px;
+    align-items: start;
+}
+
+.flow-panel {
+    position: sticky;
+    top: 24px;
+}
+
+@media (max-width: 960px) {
+    .layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .flow-panel {
+        position: static;
+    }
 }
 
 h1 {
@@ -245,21 +267,20 @@ tr.clickable {
 }
 
 /* Data flow */
-.card .results-header {
-    margin-top: 0;
+.flow {
+    height: 380px;
 }
 
-.flow {
-    height: 300px;
-    margin-top: 12px;
+.flow .react-flow__attribution {
+    background: transparent;
 }
 
 .flow .react-flow__node.flow-node {
-    width: 180px;
+    width: 170px;
     padding: 14px 12px;
     border-radius: var(--radius);
-    border: 1px solid var(--border);
-    background: var(--surface);
+    border: 1.5px solid var(--border);
+    background: transparent;
     color: var(--text-muted);
     box-shadow: none;
     display: flex;
@@ -274,17 +295,35 @@ tr.clickable {
     font-weight: 600;
 }
 
+/* every box and arrow is always there (so the size never changes), but invisible until the animal reaches it */
+.flow .react-flow__node.flow-node.hidden,
+.flow .react-flow__edge.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* a box fades in after the arrow towards it has been drawn */
+.flow .react-flow__node.flow-node.done {
+    animation: appear 0.4s ease-out 0.45s both;
+}
+
+.flow .react-flow__node.flow-node[data-id="slaughterer"] {
+    animation-delay: 0s;
+}
+
 .flow .flow-node.done {
     border-color: var(--success);
-    background: var(--success-soft);
     color: var(--success);
 }
 
 .flow .flow-node.waiting {
     border-color: var(--warning);
-    background: var(--warning-soft);
     color: var(--warning);
-    animation: pulse 1.6s ease-in-out infinite;
+    animation: appear 0.4s ease-out 0.45s both, pulse 1.6s ease-in-out 0.85s infinite;
+}
+
+.flow .react-flow__node.flow-node.waiting[data-id="slaughterer"] {
+    animation-delay: 0s, 0.4s;
 }
 
 .flow .react-flow__handle {
@@ -294,6 +333,12 @@ tr.clickable {
 .flow .react-flow__edge-path {
     stroke: var(--border);
     stroke-width: 2;
+    stroke-dasharray: 400;
+}
+
+.flow .react-flow__edge.done .react-flow__edge-path,
+.flow .react-flow__edge.waiting .react-flow__edge-path {
+    animation: draw 0.6s ease-out both;
 }
 
 .flow .react-flow__edge.done .react-flow__edge-path {
@@ -314,5 +359,21 @@ tr.clickable {
 @keyframes pulse {
     50% {
         box-shadow: 0 0 0 6px var(--warning-soft);
+    }
+}
+
+.flow .packet {
+    fill: var(--warning);
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+    }
+}
+
+@keyframes draw {
+    from {
+        stroke-dashoffset: 400;
     }
 }
