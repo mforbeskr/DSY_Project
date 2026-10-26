@@ -59,6 +59,13 @@ class AnimalRepositoryTest {
     }
 
     @Test
+    void findByRegistrationNumber_ignoresCase() {
+        repository.insert(EVENT);
+
+        assertTrue(repository.findByRegistrationNumber("test-001").isPresent());
+    }
+
+    @Test
     void findByRegistrationNumber_returnsEmptyForUnknownNumber() {
         assertTrue(repository.findByRegistrationNumber("TEST-UNKNOWN").isEmpty());
     }

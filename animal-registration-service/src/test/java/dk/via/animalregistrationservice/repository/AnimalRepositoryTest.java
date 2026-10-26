@@ -45,12 +45,19 @@ class AnimalRepositoryTest {
     void findAnimalByRegistrationNumber_findsTheAnimal() {
         save("TEST-001", LocalDateTime.of(2030, 1, 1, 12, 0));
 
-        assertEquals(FARM, repository.findAnimalByRegistrationNumber("TEST-001").orElseThrow().getOrigin());
+        assertEquals(FARM, repository.findAnimalByRegistrationNumberIgnoreCase("TEST-001").orElseThrow().getOrigin());
+    }
+
+    @Test
+    void findAnimalByRegistrationNumber_ignoresCase() {
+        save("TEST-001", LocalDateTime.of(2030, 1, 1, 12, 0));
+
+        assertTrue(repository.findAnimalByRegistrationNumberIgnoreCase("test-001").isPresent());
     }
 
     @Test
     void findAnimalByRegistrationNumber_returnsEmptyForUnknownNumber() {
-        assertTrue(repository.findAnimalByRegistrationNumber("TEST-UNKNOWN").isEmpty());
+        assertTrue(repository.findAnimalByRegistrationNumberIgnoreCase("TEST-UNKNOWN").isEmpty());
     }
 
     @Test
@@ -59,7 +66,14 @@ class AnimalRepositoryTest {
         save("TEST-002", LocalDateTime.of(2030, 1, 2, 12, 0));
         repository.save(new Animal("TEST-003", LocalDateTime.of(2030, 1, 1, 12, 0), "OTHER-TEST-FARM", 100));
 
-        assertEquals(List.of("TEST-001", "TEST-002"), registrationNumbers(repository.findAnimalsByOrigin(FARM)));
+        assertEquals(List.of("TEST-001", "TEST-002"), registrationNumbers(repository.findAnimalsByOriginIgnoreCase(FARM)));
+    }
+
+    @Test
+    void findAnimalsByOrigin_ignoresCase() {
+        save("TEST-001", LocalDateTime.of(2030, 1, 1, 12, 0));
+
+        assertEquals(List.of("TEST-001"), registrationNumbers(repository.findAnimalsByOriginIgnoreCase("test-farm")));
     }
 
     @Test

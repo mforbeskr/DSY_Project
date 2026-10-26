@@ -12,9 +12,10 @@ public interface AnimalRepository extends JpaRepository<Animal, Integer> {
     // from is included, to is excluded: arrivalDate >= from AND arrivalDate < to
     List<Animal> findAnimalsByArrivalDateGreaterThanEqualAndArrivalDateLessThan(LocalDateTime from, LocalDateTime to);
 
-    List<Animal> findAnimalsByOrigin(String origin);
+    // IgnoreCase: "hedehusene farm" also finds "Hedehusene Farm" (SQL: UPPER(origin) = UPPER(?))
+    List<Animal> findAnimalsByOriginIgnoreCase(String origin);
 
-    Optional<Animal> findAnimalByRegistrationNumber(String registrationNumber);
+    Optional<Animal> findAnimalByRegistrationNumberIgnoreCase(String registrationNumber);
 
     List<Animal> findAnimalsBySyncedFalse();
 

@@ -26,8 +26,9 @@ public class AnimalRepository {
                 .update();
     }
 
+    // ignores case, like station 1: reg001 finds REG001
     public Optional<CentralAnimal> findByRegistrationNumber(String registrationNumber) {
-        return jdbcClient.sql("SELECT animal_id, registration_number FROM animal WHERE registration_number = ?")
+        return jdbcClient.sql("SELECT animal_id, registration_number FROM animal WHERE UPPER(registration_number) = UPPER(?)")
                 .param(registrationNumber)
                 .query(CentralAnimal.class)
                 .optional();

@@ -42,7 +42,7 @@ class AnimalRegServiceTest {
     void register_savesAndReturnsTheStoredAnimal() {
         Animal animal = animal("REG001", 120.5);
         Animal stored = animal("REG001", 120.5);
-        when(repository.findAnimalByRegistrationNumber("REG001")).thenReturn(Optional.empty());
+        when(repository.findAnimalByRegistrationNumberIgnoreCase("REG001")).thenReturn(Optional.empty());
         when(repository.save(animal)).thenReturn(stored);
 
         assertSame(stored, service.register(animal));
@@ -64,7 +64,7 @@ class AnimalRegServiceTest {
 
     @Test
     void register_rejectsDuplicateRegistrationNumber() {
-        when(repository.findAnimalByRegistrationNumber("REG001")).thenReturn(Optional.of(animal("REG001", 100)));
+        when(repository.findAnimalByRegistrationNumberIgnoreCase("REG001")).thenReturn(Optional.of(animal("REG001", 100)));
 
         assertThrows(IllegalArgumentException.class, () -> service.register(animal("REG001", 120.5)));
 
@@ -74,7 +74,7 @@ class AnimalRegServiceTest {
     @Test
     void findByRegistrationNumber_returnsWhatTheRepositoryFinds() {
         Animal animal = animal("REG001", 120.5);
-        when(repository.findAnimalByRegistrationNumber("REG001")).thenReturn(Optional.of(animal));
+        when(repository.findAnimalByRegistrationNumberIgnoreCase("REG001")).thenReturn(Optional.of(animal));
 
         assertEquals(Optional.of(animal), service.findByRegistrationNumber("REG001"));
     }
@@ -100,7 +100,7 @@ class AnimalRegServiceTest {
     @Test
     void findByOrigin_returnsWhatTheRepositoryFinds() {
         List<Animal> animals = List.of(animal("REG001", 120.5));
-        when(repository.findAnimalsByOrigin("FARM001")).thenReturn(animals);
+        when(repository.findAnimalsByOriginIgnoreCase("FARM001")).thenReturn(animals);
 
         assertEquals(animals, service.findByOrigin("FARM001"));
     }

@@ -23,7 +23,7 @@ public class AnimalRegService {
         if (animal.getWeight() <= 0) {
             throw new IllegalArgumentException("Weight must be greater than 0");
         }
-        if (repository.findAnimalByRegistrationNumber(animal.getRegistrationNumber()).isPresent()) {
+        if (repository.findAnimalByRegistrationNumberIgnoreCase(animal.getRegistrationNumber()).isPresent()) {
             throw new IllegalArgumentException(
                     "Animal with registration number " + animal.getRegistrationNumber() + " already exists");
         }
@@ -33,7 +33,7 @@ public class AnimalRegService {
     }
 
     public Optional<Animal> findByRegistrationNumber(String registrationNumber) {
-        return repository.findAnimalByRegistrationNumber(registrationNumber);
+        return repository.findAnimalByRegistrationNumberIgnoreCase(registrationNumber);
     }
 
     // arrival_date holds a time as well, so one date becomes the range [that day 00:00, next day 00:00)
@@ -45,6 +45,6 @@ public class AnimalRegService {
     }
 
     public List<Animal> findByOrigin(String origin) {
-        return repository.findAnimalsByOrigin(origin);
+        return repository.findAnimalsByOriginIgnoreCase(origin);
     }
 }
