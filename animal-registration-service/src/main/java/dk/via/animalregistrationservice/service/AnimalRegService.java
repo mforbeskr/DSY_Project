@@ -32,10 +32,6 @@ public class AnimalRegService {
         return repository.save(animal);
     }
 
-    public Optional<Animal> findById(int animalId) {
-        return repository.findById(animalId);
-    }
-
     public Optional<Animal> findByRegistrationNumber(String registrationNumber) {
         return repository.findAnimalByRegistrationNumber(registrationNumber);
     }

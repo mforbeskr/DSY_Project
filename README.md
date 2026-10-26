@@ -40,9 +40,9 @@ Content-Type: application/json
 { "registrationNumber": "REG003", "arrivalDate": "2026-09-19T07:30:00", "origin": "FARM001", "weight": 110 }
 ```
 
-Hent et dyr:
+Hent et dyr (på registreringsnummer):
 ```
-GET http://localhost:8080/animals/1
+GET http://localhost:8080/animals/REG001
 ```
 
 Alle dyr der ankom på en dato:

@@ -29,24 +29,19 @@ public class AnimalController {
         this.service = service;
     }
 
-    // POST /animals  (JSON body)  ->  201 Created + the stored animal with its new id
+    // POST /animals  (JSON body)  ->  201 Created + the stored animal, Location: /animals/{registrationNumber}
     @PostMapping
     public ResponseEntity<Animal> register(@RequestBody RegisterAnimalRequest request) {
         Animal animal = new Animal(request.registrationNumber(), request.arrivalDate(), request.origin(), request.weight());
         Animal saved = service.register(animal);
 
-        return ResponseEntity.created(URI.create("/animals/" + saved.getAnimalId())).body(saved);
+        return ResponseEntity.created(URI.create("/animals/" + saved.getRegistrationNumber())).body(saved);
     }
 
-    // GET /animals/1  ->  200 + the animal, or 404 if it doesn't exist
-    @GetMapping("/{animalId}")
-    public ResponseEntity<Animal> getById(@PathVariable int animalId) {
-        return ResponseEntity.of(service.findById(animalId));
-    }
-
-    // GET /animals?registrationNumber=REG001  ->  200 + the animal, or 404
-    @GetMapping(params = "registrationNumber")
-    public ResponseEntity<Animal> getByRegistrationNumber(@RequestParam String registrationNumber) {
+    // GET /animals/REG001  ->  200 + the animal, or 404 if it doesn't exist
+    // The registration number (ear tag) is the animal's identity. The id is only a database key.
+    @GetMapping("/{registrationNumber}")
+    public ResponseEntity<Animal> getByRegistrationNumber(@PathVariable String registrationNumber) {
         return ResponseEntity.of(service.findByRegistrationNumber(registrationNumber));
     }
 

@@ -51,7 +51,7 @@ class AnimalControllerTest {
                                  "origin": "FARM001", "weight": 120.5}
                                 """))
                 .andExpect(status().isCreated())
-                .andExpect(header().string("Location", "/animals/0"))
+                .andExpect(header().string("Location", "/animals/REG001"))
                 .andExpect(jsonPath("$.registrationNumber").value("REG001"))
                 .andExpect(jsonPath("$.arrivalDate").value("2026-09-18T07:30:00"))
                 .andExpect(jsonPath("$.origin").value("FARM001"))
@@ -74,27 +74,10 @@ class AnimalControllerTest {
     }
 
     @Test
-    void getById_returns200WithTheAnimal() throws Exception {
-        when(service.findById(1)).thenReturn(Optional.of(REG001));
-
-        mockMvc.perform(get("/animals/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.registrationNumber").value("REG001"));
-    }
-
-    @Test
-    void getById_returns404ForUnknownAnimal() throws Exception {
-        when(service.findById(999)).thenReturn(Optional.empty());
-
-        mockMvc.perform(get("/animals/999"))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
     void getByRegistrationNumber_returns200WithTheAnimal() throws Exception {
         when(service.findByRegistrationNumber("REG001")).thenReturn(Optional.of(REG001));
 
-        mockMvc.perform(get("/animals").param("registrationNumber", "REG001"))
+        mockMvc.perform(get("/animals/REG001"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.origin").value("FARM001"));
     }
@@ -103,7 +86,7 @@ class AnimalControllerTest {
     void getByRegistrationNumber_returns404ForUnknownNumber() throws Exception {
         when(service.findByRegistrationNumber("NOPE")).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/animals").param("registrationNumber", "NOPE"))
+        mockMvc.perform(get("/animals/NOPE"))
                 .andExpect(status().isNotFound());
     }
 

@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react'
 import {BaseEdge, getBezierPath, MarkerType, Position, ReactFlow} from '@xyflow/react'
 import type {Edge, EdgeProps, Node} from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
-import {getAnimalById, getCentralAnimal} from './api'
+import {getAnimalByRegistrationNumber, getCentralAnimal} from './api'
 import type {Animal, CentralAnimal} from './types'
 
 type Stage = 'idle' | 'drafting' | 'local' | 'queued' | 'central'
@@ -62,7 +62,7 @@ function useStage(animal: Animal | null, drafting: boolean) {
 
         // a service that is down just means the animal hasn't got that far yet
         async function check() {
-            const local = await getAnimalById(String(tracked.animalId)).catch(() => null)
+            const local = await getAnimalByRegistrationNumber(tracked.registrationNumber).catch(() => null)
             const central = await getCentralAnimal(tracked.registrationNumber).catch(() => null)
             if (stopped) return
             const stage: Stage = central ? 'central' : local?.synced ? 'queued' : 'local'

@@ -32,12 +32,8 @@ async function getAnimal(url: string): Promise<Animal | null> {
     return response.json()
 }
 
-export function getAnimalById(animalId: string): Promise<Animal | null> {
-    return getAnimal(`/api/animals/${encodeURIComponent(animalId)}`)
-}
-
 export function getAnimalByRegistrationNumber(registrationNumber: string): Promise<Animal | null> {
-    return getAnimal(`/api/animals?registrationNumber=${encodeURIComponent(registrationNumber)}`)
+    return getAnimal(`/api/animals/${encodeURIComponent(registrationNumber)}`)
 }
 
 export function getAnimalsByDate(date: string): Promise<Animal[]> {

@@ -1,12 +1,11 @@
 import {useState} from 'react'
 import type {FormEvent} from 'react'
-import {getAnimalById, getAnimalByRegistrationNumber, getAnimalsByDate, getAnimalsByOrigin} from './api'
+import {getAnimalByRegistrationNumber, getAnimalsByDate, getAnimalsByOrigin} from './api'
 import type {Animal} from './types'
 
-type SearchType = 'id' | 'registrationNumber' | 'date' | 'origin'
+type SearchType = 'registrationNumber' | 'date' | 'origin'
 
 const searchTypes: Record<SearchType, { label: string, placeholder: string, inputType: string }> = {
-    id: {label: 'Id', placeholder: 'e.g. 1', inputType: 'number'},
     registrationNumber: {label: 'Registration no.', placeholder: 'e.g. REG001', inputType: 'text'},
     date: {label: 'Arrival date', placeholder: '', inputType: 'date'},
     origin: {label: 'Origin', placeholder: 'e.g. FARM001', inputType: 'text'},
@@ -21,7 +20,7 @@ async function find(type: SearchType, value: string): Promise<Animal[]> {
     if (type === 'date') return getAnimalsByDate(value)
     if (type === 'origin') return getAnimalsByOrigin(value)
 
-    const animal = type === 'id' ? await getAnimalById(value) : await getAnimalByRegistrationNumber(value)
+    const animal = await getAnimalByRegistrationNumber(value)
     return animal ? [animal] : []
 }
 

@@ -72,21 +72,6 @@ class AnimalRegServiceTest {
     }
 
     @Test
-    void findById_returnsWhatTheRepositoryFinds() {
-        Animal animal = animal("REG001", 120.5);
-        when(repository.findById(1)).thenReturn(Optional.of(animal));
-
-        assertEquals(Optional.of(animal), service.findById(1));
-    }
-
-    @Test
-    void findById_returnsEmptyForUnknownAnimal() {
-        when(repository.findById(999)).thenReturn(Optional.empty());
-
-        assertEquals(Optional.empty(), service.findById(999));
-    }
-
-    @Test
     void findByRegistrationNumber_returnsWhatTheRepositoryFinds() {
         Animal animal = animal("REG001", 120.5);
         when(repository.findAnimalByRegistrationNumber("REG001")).thenReturn(Optional.of(animal));
