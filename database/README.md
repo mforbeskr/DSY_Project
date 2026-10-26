@@ -2,10 +2,13 @@
 
 Der er to databaser:
 
-| Database | Scripts | Bruges af |
-|---|---|---|
-| `dsy_slaughterhouse` (central) | `01_create_tables.sql`, `02_insert_data.sql` | traceability-service, central-ingestion-service |
-| `station1_registration` (lokal for station 1) | `station1/01_create_tables.sql`, `station1/02_insert_data.sql` | animal-registration-service |
+| Database | Tabellerne oprettes af | Testdata | Bruges af |
+|---|---|---|---|
+| `dsy_slaughterhouse` (central) | central-ingestion-service | `insert_data.sql` | traceability-service, central-ingestion-service |
+| `station1_registration` (lokal for station 1) | animal-registration-service | `station1/insert_data.sql` | animal-registration-service |
+
+Tabellerne bliver genereret af Hibernate ud fra JPA-entities (`spring.jpa.hibernate.ddl-auto=update`).
+Den centrale domænemodel ligger i `central-ingestion-service/src/main/java/dk/via/centralingestionservice/model`.
 
 Brugernavn og kode til din egen PostgreSQL skal stå i `traceability-service/src/main/java/database/DatabaseConfig.java`
 og i `application.properties` i animal-registration-service og central-ingestion-service.
@@ -21,12 +24,13 @@ og i `application.properties` i animal-registration-service og central-ingestion
    CREATE DATABASE station1_registration;
    ```
 3. **Skift til den centrale database:** Højreklik på forbindelsen, vælg **Properties**, og ret Database til `dsy_slaughterhouse`.
-4. **Kør scripts:** Højreklik på `01_create_tables.sql`, vælg **Run**, og vælg forbindelsen som target.
-   Gør derefter det samme med `02_insert_data.sql`.
-5. **Gentag for station 1:** Ret Database til `station1_registration`, og kør `station1/01_create_tables.sql` og `station1/02_insert_data.sql`.
-6. **Tjek:** Opdatér forbindelsen. `dsy_slaughterhouse` skal have 7 tabeller, og `station1_registration` skal have 1.
+4. **Opret tabellerne:** Start central-ingestion-service og animal-registration-service én gang.
+   Hibernate opretter så tabellerne i hver sin database.
+5. **Indsæt testdata:** Højreklik på `insert_data.sql`, vælg **Run**, og vælg forbindelsen som target.
+6. **Gentag for station 1:** Ret Database til `station1_registration`, og kør `station1/insert_data.sql`.
+7. **Tjek:** Opdatér forbindelsen. `dsy_slaughterhouse` skal have 7 tabeller, og `station1_registration` skal have 1.
 
-> Springer du trin 3 eller 5 over, bliver tabellerne oprettet i den forkerte database, og så finder servicen dem ikke.
+> Springer du trin 3 eller 6 over, bliver testdata indsat i den forkerte database.
 
 ## RabbitMQ
 

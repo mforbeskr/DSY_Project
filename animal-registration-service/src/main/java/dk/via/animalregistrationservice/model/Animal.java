@@ -1,5 +1,6 @@
 package dk.via.animalregistrationservice.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,10 +12,15 @@ import java.time.LocalDateTime;
 public class Animal {
     @GeneratedValue(strategy = GenerationType.IDENTITY) @Id
     private int animalId;
+    @Column(nullable = false, unique = true, length = 50)
     private String registrationNumber;
+    @Column(nullable = false)
     private LocalDateTime arrivalDate;
+    @Column(nullable = false, length = 50)
     private String origin;
+    @Column(nullable = false)
     private double weight;
+    @Column(nullable = false)
     private boolean synced;
 
     public Animal() {

@@ -17,9 +17,14 @@ Station 1 gemmer lokalt, så den virker selvom nettet er nede. Dyrene sendes via
 
 Ligger i `documentation/`. Begge domænemodeller (Ass1 og Ass3) er med, så man kan se udviklingen.
 
+## Domænemodel og tabeller
+
+Domænemodellen findes som JPA-entities (`Animal`, `Part`, `PartType`, `Tray`, `Product`, `ProductType`) i `central-ingestion-service/src/main/java/dk/via/centralingestionservice/model`.
+Tabellerne bliver genereret af Hibernate ud fra entities (`spring.jpa.hibernate.ddl-auto=update`), så der er ingen `CREATE TABLE`-scripts.
+
 ## Kør det
 
-1. Opret databaserne og kør scripts, se `database/README.md`
+1. Opret databaserne, start services én gang så Hibernate laver tabellerne, og indsæt testdata. Se `database/README.md`
 2. Start RabbitMQ (kræver Docker): `docker compose up -d`
 3. Start de tre services: `MainRegistration` i animal-registration-service, `MainIngestion` i de to andre
 4. Frontend (kræver Node): `cd frontend`, `npm install`, `npm run dev` og åbn http://localhost:5173
