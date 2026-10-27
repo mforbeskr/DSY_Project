@@ -1,13 +1,14 @@
 package dk.via.centralingestionservice.controller;
 
+import dk.via.centralingestionservice.model.Animal;
 import dk.via.centralingestionservice.repository.AnimalRepository;
-import dk.via.centralingestionservice.repository.CentralAnimal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
@@ -26,17 +27,18 @@ class AnimalControllerTest {
 
     @Test
     void getByRegistrationNumber_returns200WhenTheAnimalIsInTheCentralDatabase() throws Exception {
-        when(repository.findByRegistrationNumber("REG001")).thenReturn(Optional.of(new CentralAnimal(1, "REG001")));
+        Animal animal = new Animal("REG001", LocalDateTime.of(2026, 9, 18, 7, 30), "FARM001", 120.5);
+        when(repository.findAnimalByRegistrationNumberIgnoreCase("REG001")).thenReturn(Optional.of(animal));
 
         mockMvc.perform(get("/animals/REG001"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.animalId").value(1))
+                .andExpect(jsonPath("$.animalId").exists())
                 .andExpect(jsonPath("$.registrationNumber").value("REG001"));
     }
 
     @Test
     void getByRegistrationNumber_returns404WhenTheAnimalHasNotArrivedYet() throws Exception {
-        when(repository.findByRegistrationNumber("REG999")).thenReturn(Optional.empty());
+        when(repository.findAnimalByRegistrationNumberIgnoreCase("REG999")).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/animals/REG999"))
                 .andExpect(status().isNotFound());

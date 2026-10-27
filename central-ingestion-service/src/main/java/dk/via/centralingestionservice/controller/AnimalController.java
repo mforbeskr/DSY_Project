@@ -1,7 +1,6 @@
 package dk.via.centralingestionservice.controller;
 
 import dk.via.centralingestionservice.repository.AnimalRepository;
-import dk.via.centralingestionservice.repository.CentralAnimal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/animals")
@@ -30,7 +31,10 @@ public class AnimalController {
     @ApiResponse(responseCode = "404", description = "Not there (yet)", content = @Content)
     @GetMapping("/{registrationNumber}")
     public ResponseEntity<CentralAnimal> getByRegistrationNumber(
-            @Parameter(description = "The animal's ear tag", example = "REG001") @PathVariable String registrationNumber) {
-        return ResponseEntity.of(repository.findByRegistrationNumber(registrationNumber));
+            @Parameter(description = "The animal's ear tag", example = "REG001")
+            @PathVariable String registrationNumber) {
+        Optional<CentralAnimal> found = repository.findAnimalByRegistrationNumberIgnoreCase(registrationNumber)
+                .map(animal -> new CentralAnimal(animal.getAnimalId(), animal.getRegistrationNumber()));
+        return ResponseEntity.of(found);
     }
 }

@@ -1,72 +1,61 @@
 package dk.via.centralingestionservice.repository;
 
-import dk.via.centralingestionservice.messaging.AnimalRegisteredEvent;
+import dk.via.centralingestionservice.model.Animal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
-import org.springframework.boot.jdbc.test.autoconfigure.JdbcTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.jdbc.core.simple.JdbcClient;
 
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Runs against the real central database. Every test is rolled back afterwards.
+ * ddl-auto=validate so the test never changes the tables.
  */
-@JdbcTest
+@DataJpaTest(properties = "spring.jpa.hibernate.ddl-auto=validate")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(AnimalRepository.class)
 class AnimalRepositoryTest {
 
     @Autowired
     private AnimalRepository repository;
 
-    @Autowired
-    private JdbcClient jdbcClient;
-
-    private static final AnimalRegisteredEvent EVENT =
-            new AnimalRegisteredEvent("TEST-001", LocalDateTime.of(2030, 1, 1, 12, 0), "TEST-FARM", 100);
-
-    private int countAnimals(String registrationNumber) {
-        return jdbcClient.sql("SELECT COUNT(*) FROM animal WHERE registration_number = ?")
-                .param(registrationNumber)
-                .query(Integer.class)
-                .single();
+    private Animal save(String registrationNumber) {
+        return repository.save(new Animal(registrationNumber, LocalDateTime.of(2030, 1, 1, 12, 0), "TEST-FARM", 100));
     }
 
     @Test
-    void insert_storesTheAnimal() {
-        assertEquals(1, repository.insert(EVENT));
-        assertEquals(1, countAnimals("TEST-001"));
+    void save_givesTheAnimalAnIdFromTheDatabase() {
+        assertTrue(save("TEST-001").getAnimalId() > 0);
     }
 
     @Test
-    void insert_ignoresAnAnimalThatIsAlreadyThere() {
-        repository.insert(EVENT);
+    void findAnimalByRegistrationNumber_findsASavedAnimal() {
+        save("TEST-001");
 
-        assertEquals(0, repository.insert(EVENT));
-        assertEquals(1, countAnimals("TEST-001"));
+        assertEquals("TEST-FARM", repository.findAnimalByRegistrationNumberIgnoreCase("TEST-001").orElseThrow().getOrigin());
     }
 
     @Test
-    void findByRegistrationNumber_findsAnInsertedAnimal() {
-        repository.insert(EVENT);
+    void findAnimalByRegistrationNumber_ignoresCase() {
+        save("TEST-001");
 
-        assertEquals("TEST-001", repository.findByRegistrationNumber("TEST-001").orElseThrow().registrationNumber());
+        assertTrue(repository.findAnimalByRegistrationNumberIgnoreCase("test-001").isPresent());
     }
 
     @Test
-    void findByRegistrationNumber_ignoresCase() {
-        repository.insert(EVENT);
-
-        assertTrue(repository.findByRegistrationNumber("test-001").isPresent());
+    void findAnimalByRegistrationNumber_returnsEmptyForUnknownNumber() {
+        assertTrue(repository.findAnimalByRegistrationNumberIgnoreCase("TEST-UNKNOWN").isEmpty());
     }
 
     @Test
-    void findByRegistrationNumber_returnsEmptyForUnknownNumber() {
-        assertTrue(repository.findByRegistrationNumber("TEST-UNKNOWN").isEmpty());
+    void existsByRegistrationNumber_isTrueOnlyForSavedAnimals() {
+        save("TEST-001");
+
+        assertTrue(repository.existsByRegistrationNumberIgnoreCase("test-001"));
+        assertFalse(repository.existsByRegistrationNumberIgnoreCase("TEST-UNKNOWN"));
     }
 }
