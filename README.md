@@ -30,6 +30,14 @@ Tabellerne bliver genereret af Hibernate ud fra entities (`spring.jpa.hibernate.
 4. Frontend (kræver Node): `cd frontend`, `npm install`, `npm run dev` og åbn http://localhost:5173
 5. Tests: `mvn test` i roden (kræver PostgreSQL)
 
+## API-dokumentation (Swagger UI)
+
+Når services kører:
+- Station 1 (registrering): http://localhost:8080/swagger-ui.html
+- Central ingestion: http://localhost:8081/swagger-ui.html
+
+Her kan man se alle endpoints, parametre og svar, og prøve dem med **Try it out**.
+
 ## Postman eksempler
 
 Registrer et dyr:
